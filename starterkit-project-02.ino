@@ -1,29 +1,41 @@
 
-int switchState = 0;
+const int switchState = 2;
+const int greenLED = 3;
+const int redLED1 = 4;
+const int redLED2 = 5;
 
 void setup() {
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(2, INPUT);
+  pinMode(greenLED, OUTPUT);
+  pinMode(redLED1, OUTPUT);
+  pinMode(redLED2, OUTPUT);
+  pinMode(switchState, INPUT);
 }
 
 void loop() {
-  switchState = digitalRead(2);
-  if (switchState == LOW) { // button not pressed
-    digitalWrite(3, HIGH); // green
-    digitalWrite(4, LOW); // red 1
-    digitalWrite(5, LOW); // red 2
-  }
-  else { // button pressed
-    digitalWrite(3, LOW);
+  const int timeDelay = 500;
 
-    digitalWrite(4, LOW);
-    digitalWrite(5, HIGH);
-    delay(250);
-
-    digitalWrite(4, HIGH);
-    digitalWrite(5, LOW);
-    delay(250);
+  if (digitalRead(switchState) == LOW) { // button not pressed
+    turnOn(greenLED);
+    turnOff(redLED1);
+    turnOff(redLED2);
   }
+  else {
+    turnOff(greenLED);
+
+    turnOff(redLED1);
+    turnOn(redLED2);
+    delay(timeDelay);
+
+    turnOn(redLED1);
+    turnOff(redLED2);
+    delay(timeDelay);
+  }
+}
+
+void turnOff(int led) {
+  digitalWrite(led, LOW);
+}
+
+void turnOn(int led) {
+  digitalWrite(led, HIGH);
 }
